@@ -6,7 +6,7 @@ module.exports = function (grunt) {
 		
 			clean: {
 				build: {
-					src: ["**/bin/**", "**/obj/**", "buildOutput/**", "!node_modules/**", "!Build/**", "!packages/**"]
+					src: ["**/bin/**", "**/obj/**", "build_output/**", "nuget_package/**", "!node_modules/**", "!Build/**", "!packages/**"]
 				}
 			},
 			
@@ -17,9 +17,15 @@ module.exports = function (grunt) {
 							expand: true,
 							cwd: 'HobknobClientNet/bin/Release/',
               src: ['**'],
-							dest: 'buildOutput/'
+							dest: 'build_output/'
 						}
 					]
+				},
+				nuspec: {
+					files: [ { 
+						src: "HobknobClientNet.nuspec",
+						dest: "build_output/"
+					}]
 				}
 			},
 			
@@ -42,6 +48,19 @@ module.exports = function (grunt) {
 				runTests: {
 					cmd: "Build\\nunit\\bin\\nunit-console.exe --xml=UnitTestsResult.xml HobknobClientNet.Tests\\bin\\Release\\HobknobClientNet.Tests.dll"
 				}
+			},
+			
+			nugetpack: {
+				dist: {
+					src: 'build_output/HobknobClientNet.nuspec',
+					dest: 'nuget_package/'
+				}
+			},
+			
+			nugetpush: {
+				dist: {
+					src: 'nuget_package/*.nupkg',
+				}
 			}
 			
 		});
@@ -50,13 +69,16 @@ module.exports = function (grunt) {
 		grunt.loadNpmTasks('grunt-contrib-copy');
 		grunt.loadNpmTasks('grunt-msbuild');
 		grunt.loadNpmTasks('grunt-exec');
+		grunt.loadNpmTasks('grunt-nuget');
 
     grunt.registerTask('default', 'build');
     grunt.registerTask('build', [
         'clean:build',
         'msbuild:build',
         'test',
-        'copy:release'
+        'copy:release',
+				'copy:nuspec',
+				'nugetpack:dist'
     ]);
     grunt.registerTask('test', ['exec:runTests']);
 };

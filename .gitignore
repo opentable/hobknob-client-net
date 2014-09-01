@@ -151,7 +151,8 @@ ClientBin/
 *.pfx
 *.publishsettings
 node_modules/
-buildOutput
+build_output
+nuget_package
 UnitTestsResult.xml
 
 # RIA/Silverlight projects
