@@ -16,13 +16,13 @@ Install-package hobknob-client-net
 var etcdHost = "localhost";
 var etcdPort = 4001;
 var applicationName = "radApp";
-var cacheUpdateInterval = TimeStap.FromSeconds(180);
+var cacheUpdateInterval = TimeSpan.FromSeconds(180);
 
 var client = new HobknobClientFactory().Create(etcdHost, etcdPort, applicationName, cacheUpdateInterval);
 
 var toggle1Status = client.Get("Toggle1"); // true
-var toggle1Status = client.Get("ToggleThatDoesNotExist"); // throws exception
-var toggle2Status = client.GetOrDefault("ToggleThatDoesNotExist", true); // true
+var toggle2Status = client.Get("ToggleThatDoesNotExist"); // throws exception
+var toggle3Status = client.GetOrDefault("ToggleThatDoesNotExist", true); // true
 
 ```
 
@@ -51,7 +51,7 @@ Gets the boolean value of a feature toggle if it exists, otherwise throw excepti
 
 ### client.GetOrDefault(string toggleName, bool defaultValue)
 
-Gets the value of a feature toggle (`true` or `false`) if exists, otherwise return the default value (`true` or `false`)
+Gets the boolean value of a feature toggle if it exists, otherwise return the default value
 
 - `toggleName` the name of the toggle, used with the application name to get the feature toggle value
 - `defaultValue` the value to return if the toggle value is not found
@@ -61,9 +61,19 @@ Gets the value of a feature toggle (`true` or `false`) if exists, otherwise retu
 
 An event which is raised on each cache update
 
+```c#
 
-### client.CacheUpdateFailed += (/*object*/ sender, /*CacheUpdateFailedArgs*/ eventArgs) => {}
+client.CacheUpdated += (sender, eventArgs) => { console.Write("Updated"); }
+
+```
+
+
+### client.CacheUpdateFailed
 
 An event which is raised when there is an error updating the cache.
 
-- `eventArgs` has a property called exception, which is the original exception
+```c#
+
+client.CacheUpdateFailed += (sender, eventArgs) => { console.Write(eventArgs.Exception.ToString()); }
+
+```
