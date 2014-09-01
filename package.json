@@ -1,6 +1,6 @@
 {
   "name": "hobknob-client-net",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "A .net client library for Hobknob",
   "main": "Gruntfile.js",
   "scripts": {

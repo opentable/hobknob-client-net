@@ -17,7 +17,7 @@ module.exports = function (grunt) {
 							expand: true,
 							cwd: 'HobknobClientNet/bin/Release/',
               src: ['**'],
-							dest: 'build_output/'
+							dest: 'build_output/lib/'
 						}
 					]
 				},
