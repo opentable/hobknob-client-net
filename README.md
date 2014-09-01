@@ -9,6 +9,21 @@ Either use the Nuget user interface in Visual Studio, or type the following in t
 Install-package hobknob-client-net
 ```
 
+### Building
+
+This project uses Grunt to build, test, and manage Nuget package creation. Run the following in the command line:
+
+```
+npm install
+grunt
+```
+
+There is a file called HobknobClientNet.nuspec which is used to configure the Nuget package. See http://docs.nuget.org/ for more information.
+
+### Publishing to Nuget
+
+TODO
+
 ## Usage
 
 ```c#
@@ -70,7 +85,7 @@ client.CacheUpdated += (sender, eventArgs) => { console.Write("Updated"); }
 
 ### client.CacheUpdateFailed
 
-An event which is raised when there is an error updating the cache.
+An event which is raised when there is an error updating the cache
 
 ```c#
 
