@@ -57,7 +57,7 @@ Gets the boolean value of a feature toggle if it exists, otherwise return the de
 - `defaultValue` the value to return if the toggle value is not found
 
 
-### client.CacheUpdated += (/*object*/ sender, /*EventArgs*/ eventArgs) => {}
+### client.CacheUpdated
 
 An event which is raised on each cache update
 
