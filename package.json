@@ -1,0 +1,24 @@
+{
+	"name": "hobknob-client-net",
+	"version": "0.0.1",
+	"description": "A .net client library for Hobknob",
+	"main": "Gruntfile.js",
+	"scripts": {
+		"test": "grunt test"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/opentable/hobknob-client-net.git"
+	},
+	"author": "Dazzling Beavers",
+	"license": "MIT",
+	"homepage": "https://github.com/opentable/hobknob-client-net",
+	"devDependencies": {
+		"grunt": "~0.4.2",
+		"grunt-cli": "~0.1.13",
+		"grunt-contrib-clean": "~0.5.0",
+		"grunt-contrib-copy": "~0.5.0",
+		"grunt-exec": "~0.4.3",
+		"grunt-msbuild": "~0.1.9"
+	}
+}
