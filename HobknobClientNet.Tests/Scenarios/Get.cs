@@ -44,5 +44,12 @@ namespace HobknobClientNet.Tests.Scenarios
             When_I_get("toggle1", out _toggleValue);
             Assert.That(_toggleValue, Is.True);
         }
+
+        [Test]
+        public void Bad_etcd_value_throws_exception()
+        {
+            Given_a_toggle("app1", "toggle1", "bad");
+            Assert.That(() => When_I_get("toggle1", out _toggleValue), Throws.Exception);
+        }
     }
 }

@@ -16,11 +16,15 @@ namespace HobknobClientNet
 
         private Dictionary<string, bool?> _cache;
 
-        public FeatureToggleCache(FeatureToggleProvider featureToggleProvider, TimeSpan updateInterval)
+        public FeatureToggleCache(FeatureToggleProvider featureToggleProvider, TimeSpan cacheUpdateInterval)
         {
             _featureToggleProvider = featureToggleProvider;
-            // todo: gaurd against crazy short update interval
-            _updateInterval = updateInterval;
+            _updateInterval = cacheUpdateInterval;
+
+            if (_updateInterval < TimeSpan.FromSeconds(1))
+            {
+                throw new Exception("Cache update interval must be at least 1 second");
+            }
         }
 
         public void Initialize()

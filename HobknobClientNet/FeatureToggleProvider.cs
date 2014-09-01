@@ -18,7 +18,7 @@ namespace HobknobClientNet
 
         public IEnumerable<KeyValuePair<string, bool?>> Get()
         {
-            var etcdResponse = _etcdClient.Get(_applicationDirectoryKey); // todo: does this support recursive node gets?
+            var etcdResponse = _etcdClient.Get(_applicationDirectoryKey);
 
             if (etcdResponse.ErrorCode.HasValue)
             {
@@ -36,7 +36,7 @@ namespace HobknobClientNet
         private static KeyValuePair<string, bool?> GetKeyValuePair(Node node)
         {
             var key = GetKey(node.Key);
-            var featureToggleValue = ParseFeatureToggleValue(node.Value);
+            var featureToggleValue = ParseFeatureToggleValue(node.Key, node.Value);
             return new KeyValuePair<string, bool?>(key, featureToggleValue);
         }
 
@@ -45,7 +45,7 @@ namespace HobknobClientNet
             return path.Split('/').Last();
         }
 
-        private static bool? ParseFeatureToggleValue(string value)
+        private static bool? ParseFeatureToggleValue(string key, string value)
         {
             if (value == null) return null;
 
@@ -56,8 +56,7 @@ namespace HobknobClientNet
                 case "false":
                     return false;
                 default:
-                    // todo: exception? log?
-                    return null;
+                    throw new Exception(string.Format("Bad value for key: {0}. Must be 'true' or 'false', but was: {1}.", key, value));
             }
         }
     }

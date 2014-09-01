@@ -15,7 +15,7 @@ namespace HobknobClientNet
             var featureToggleProvider = new FeatureToggleProvider(etcdClient, applicationName);
             var firstTimeInitializedEvent = new ManualResetEvent(false);
             var featureToggleCache = new FeatureToggleCache(featureToggleProvider, cacheUpdateInterval);
-            var hobknobClient = new HobknobClient(featureToggleCache);
+            var hobknobClient = new HobknobClient(featureToggleCache, applicationName);
 
             featureToggleCache.CacheUpdated += (sender, args) => firstTimeInitializedEvent.Set();
 

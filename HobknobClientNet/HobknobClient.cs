@@ -8,20 +8,22 @@ namespace HobknobClientNet
         public event EventHandler<CacheUpdateFailedArgs> CacheUpdateFailed;
 
         private readonly FeatureToggleCache _featureToggleCache;
+        private readonly string _applicationName;
 
-        internal HobknobClient(FeatureToggleCache featureToggleCache)
+        internal HobknobClient(FeatureToggleCache featureToggleCache, string applicationName)
         {
             _featureToggleCache = featureToggleCache;
+            _applicationName = applicationName;
             _featureToggleCache.CacheUpdated += RaiseCacheUpdatedEvent;
             _featureToggleCache.CacheUpdateFailed += RaiseCacheUpdateFailedEvent;
         }
 
-        public bool Get(string featureToggleName)
+        public bool Get(string toggleName)
         {
-            var value = _featureToggleCache.Get(featureToggleName);
+            var value = _featureToggleCache.Get(toggleName);
             if (!value.HasValue)
             {
-                throw new Exception("Key not found"); // todo: better exception
+                throw new Exception(string.Format("Key not found for toggle {0}/{1}", _applicationName, toggleName));
             }
             return value.Value;
         }
