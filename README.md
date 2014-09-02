@@ -22,7 +22,17 @@ There is a file called HobknobClientNet.nuspec which is used to configure the Nu
 
 ### Publishing to Nuget
 
-TODO
+The grunt plug-in grunt-nuget is used to package and publish nuget packages. To publish this package, run the following:
+
+```
+grunt build
+grunt nugetpush:dist
+```
+
+Notes:
+1. The version number in the HobknobClientNet.nuspec file must be incremented on each publish.
+2. You must specify a user auth key to publish to Nuget (see https://github.com/spatools/grunt-nuget/wiki/Key-Options)
+
 
 ## Usage
 
