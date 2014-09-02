@@ -2,7 +2,7 @@
   <metadata>
     <id>hobknob-client-net</id>
 	<!-- Version is changed via the Package.json file -->
-    <version>0.1.2</version>
+    <version>0.2.0</version>
     <authors>OpenTable</authors>
     <owners>OpenTable</owners>
     <projectUrl>https://github.com/opentable/hobknob-client-net</projectUrl>
