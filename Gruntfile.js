@@ -1,4 +1,5 @@
 ﻿'use strict';
+var package_json = require('./package.json');
 
 module.exports = function (grunt) {
 
@@ -61,7 +62,29 @@ module.exports = function (grunt) {
 				dist: {
 					src: 'nuget_package/*.nupkg',
 				}
-			}
+			},
+			
+			assemblyinfo: {
+				options: {
+					files: ['HobknobClientNet/HobknobClientNet.csproj'],
+					info: {
+						title: package_json.name,
+						description: package_json.description,
+						company: package_json.company,
+						product: package_json.name,
+						copyright: 'Copyright 2014 © ' + package_json.company,
+						version: package_json.version + ".0",
+						fileVersion: package_json.version + ".0"
+					}
+				}
+			},
+			
+			xmlpoke: {
+				updateNuspecVersion: {
+					options: { xpath: '//package/metadata/version', value: package_json.version },
+					files: { 'HobknobClientNet.nuspec': 'HobknobClientNet.nuspec' },
+				},
+			},
 			
 		});
 		
@@ -70,10 +93,14 @@ module.exports = function (grunt) {
 		grunt.loadNpmTasks('grunt-msbuild');
 		grunt.loadNpmTasks('grunt-exec');
 		grunt.loadNpmTasks('grunt-nuget');
+		grunt.loadNpmTasks('grunt-dotnet-assembly-info');
+		grunt.loadNpmTasks('grunt-xmlpoke');
 
     grunt.registerTask('default', 'build');
     grunt.registerTask('build', [
         'clean:build',
+				'assemblyinfo',
+				'xmlpoke:updateNuspecVersion',
         'msbuild:build',
         'test',
         'copy:release',
