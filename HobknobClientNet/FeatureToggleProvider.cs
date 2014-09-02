@@ -16,7 +16,7 @@ namespace HobknobClientNet
             _applicationDirectoryKey = string.Format("v1/toggles/{0}", applicationName);
         }
 
-        public IEnumerable<KeyValuePair<string, bool?>> Get()
+        public IEnumerable<KeyValuePair<string, bool>> Get()
         {
             var etcdResponse = _etcdClient.Get(_applicationDirectoryKey);
 
@@ -25,19 +25,15 @@ namespace HobknobClientNet
                 const int keyNotFoundEtcdErrorCode = 100;
                 if (etcdResponse.ErrorCode == keyNotFoundEtcdErrorCode)
                 {
-                    return Enumerable.Empty<KeyValuePair<string, bool?>>();
+                    return Enumerable.Empty<KeyValuePair<string, bool>>();
                 }
                 throw new Exception("Error getting toggles from etcd: " + etcdResponse.Message);
             }
 
-            return etcdResponse.Node.Nodes.Select(GetKeyValuePair);
-        }
-
-        private static KeyValuePair<string, bool?> GetKeyValuePair(Node node)
-        {
-            var key = GetKey(node.Key);
-            var featureToggleValue = ParseFeatureToggleValue(node.Key, node.Value);
-            return new KeyValuePair<string, bool?>(key, featureToggleValue);
+            return etcdResponse.Node.Nodes
+                .Select(node => new { Key = GetKey(node.Key), Value = ParseFeatureToggleValue(node.Key, node.Value) })
+                .Where(pair => pair.Value.HasValue)
+                .Select(pair => new KeyValuePair<string, bool>(pair.Key, pair.Value.Value));
         }
 
         private static string GetKey(string path)
@@ -56,7 +52,7 @@ namespace HobknobClientNet
                 case "false":
                     return false;
                 default:
-                    throw new Exception(string.Format("Bad value for key: {0}. Must be 'true' or 'false', but was: {1}.", key, value));
+                    return null;
             }
         }
     }

@@ -9,18 +9,28 @@ Either use the Nuget user interface in Visual Studio, or type the following in t
 Install-package hobknob-client-net
 ```
 
-### Building
+## Building from source
 
-This project uses Grunt to build, test, and manage Nuget package creation. Run the following in the command line:
+This project uses Grunt to build and create a Nuget package. Run the following in the command line:
 
 ```
 npm install
-grunt
+grunt build
 ```
 
 There is a file called HobknobClientNet.nuspec which is used to configure the Nuget package. See http://docs.nuget.org/ for more information.
 
-### Publishing to Nuget
+### Testing
+
+There are end-to-end tests which can be run via grunt.
+
+> These tests require Etcd to be installed locally on port 4001 (this can be done via Vagrant by executing `vagrant up` in the root directory).
+
+```
+grunt test
+```
+
+### Publishing package to Nuget
 
 The grunt plug-in grunt-nuget is used to package and publish nuget packages. To publish this package, run the following:
 

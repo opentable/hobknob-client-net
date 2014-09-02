@@ -102,7 +102,6 @@ module.exports = function (grunt) {
 				'assemblyinfo',
 				'xmlpoke:updateNuspecVersion',
         'msbuild:build',
-        'test',
         'copy:release',
 				'copy:nuspec',
 				'nugetpack:dist'

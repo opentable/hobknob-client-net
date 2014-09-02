@@ -13,8 +13,7 @@ namespace HobknobClientNet
         private readonly FeatureToggleProvider _featureToggleProvider;
         private readonly TimeSpan _updateInterval;
         private Timer _timer;
-
-        private Dictionary<string, bool?> _cache;
+        private Dictionary<string, bool> _cache;
 
         public FeatureToggleCache(FeatureToggleProvider featureToggleProvider, TimeSpan cacheUpdateInterval)
         {
@@ -23,38 +22,57 @@ namespace HobknobClientNet
 
             if (_updateInterval < TimeSpan.FromSeconds(1))
             {
-                throw new Exception("Cache update interval must be at least 1 second");
+                throw new Exception("Cache update interval must be at least 1 second long");
             }
         }
 
         public void Initialize()
         {
-            _timer = new Timer(UpdateCache, null, TimeSpan.Zero, _updateInterval);
+            Exception exception;
+            if (!UpdateCache(out exception))
+            {
+                throw exception;
+            }
+            _timer = new Timer(UpdateCacheTick, null, _updateInterval, _updateInterval);
         }
 
         public bool? Get(string featureToggleName)
         {
-            bool? value;
-            return _cache.TryGetValue(featureToggleName, out value) ? value : null;
+            bool value;
+            return _cache.TryGetValue(featureToggleName, out value) ? value : (bool?)null;
         }
 
-        private void UpdateCache(object _)
+        private bool UpdateCache(out Exception exception)
         {
             try
             {
-                var applicationFeatureToggles = _featureToggleProvider.Get();
-                _cache = applicationFeatureToggles.ToDictionary(x => x.Key, x => x.Value);
+                var featureToggles = _featureToggleProvider.Get();
+                _cache = featureToggles.ToDictionary(x => x.Key, x => x.Value);
             }
             catch (Exception ex)
             {
-                CacheUpdateFailed(this, new CacheUpdateFailedArgs(ex));
-                return;
+                if (CacheUpdateFailed != null)
+                {
+                    CacheUpdateFailed(this, new CacheUpdateFailedArgs(ex));
+                }
+
+                exception = ex;
+                return false;
             }
 
             if (CacheUpdated != null)
             {
                 CacheUpdated(this, EventArgs.Empty);
             }
+
+            exception = null;
+            return true;
+        }
+
+        private void UpdateCacheTick(object _)
+        {
+            Exception ignore;
+            UpdateCache(out ignore);
         }
 
         public void Dispose()

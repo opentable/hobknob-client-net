@@ -11,7 +11,7 @@ namespace HobknobClientNet.Tests.Scenarios
         private HobknobClient _hobknobClient;
         private string _applicationName;
 
-        private const string EtcdHost = "192.168.7.58";
+        private const string EtcdHost = "127.0.0.1";
         private const int EtcdPort = 4001;
 
         private readonly HashSet<string> _applicationKeysToClearOnTearDown = new HashSet<string>();

@@ -14,6 +14,7 @@ namespace HobknobClientNet
         {
             _featureToggleCache = featureToggleCache;
             _applicationName = applicationName;
+
             _featureToggleCache.CacheUpdated += RaiseCacheUpdatedEvent;
             _featureToggleCache.CacheUpdateFailed += RaiseCacheUpdateFailedEvent;
         }
@@ -51,6 +52,9 @@ namespace HobknobClientNet
 
         public void Dispose()
         {
+            _featureToggleCache.CacheUpdated -= RaiseCacheUpdatedEvent;
+            _featureToggleCache.CacheUpdateFailed -= RaiseCacheUpdateFailedEvent;
+
             if (_featureToggleCache != null)
             {
                 _featureToggleCache.Dispose();
