@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CacheUpdate.cs" />
     <Compile Include="CacheUpdateFailedArgs.cs" />
     <Compile Include="FeatureToggleCache.cs" />
     <Compile Include="FeatureToggleProvider.cs" />

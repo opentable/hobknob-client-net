@@ -7,7 +7,7 @@ namespace HobknobClientNet
 {
     public class FeatureToggleCache : IDisposable
     {
-        public event EventHandler CacheUpdated;
+        public event EventHandler<CacheUpdatedArgs> CacheUpdated;
         public event EventHandler<CacheUpdateFailedArgs> CacheUpdateFailed;
 
         private readonly FeatureToggleProvider _featureToggleProvider;
@@ -44,10 +44,10 @@ namespace HobknobClientNet
 
         private bool UpdateCache(out Exception exception)
         {
+            Dictionary<string, bool> featureToggles;
             try
             {
-                var featureToggles = _featureToggleProvider.Get();
-                _cache = featureToggles.ToDictionary(x => x.Key, x => x.Value);
+                featureToggles = _featureToggleProvider.Get().ToDictionary(x => x.Key, x => x.Value);
             }
             catch (Exception ex)
             {
@@ -60,9 +60,13 @@ namespace HobknobClientNet
                 return false;
             }
 
+            var updates = GetUpdates(_cache, featureToggles);
+
+            _cache = featureToggles;
+
             if (CacheUpdated != null)
             {
-                CacheUpdated(this, EventArgs.Empty);
+                CacheUpdated(this, new CacheUpdatedArgs(updates));
             }
 
             exception = null;
@@ -75,12 +79,53 @@ namespace HobknobClientNet
             UpdateCache(out ignore);
         }
 
+        private static IEnumerable<CacheUpdate> GetUpdates(Dictionary<string, bool> existingToggles, Dictionary<string, bool> newToggles)
+        {
+            var existingNotNull = existingToggles ?? new Dictionary<string, bool>();
+
+            var updates = new List<CacheUpdate>();
+            foreach (var newToggle in newToggles)
+            {
+                bool existingValue;
+                if (existingNotNull.TryGetValue(newToggle.Key, out existingValue))
+                {
+                    if (existingValue != newToggle.Value)
+                    {
+                        updates.Add(new CacheUpdate(newToggle.Key, existingValue, newToggle.Value));
+                    }
+                }
+                else
+                {
+                    updates.Add(new CacheUpdate(newToggle.Key, null, newToggle.Value));
+                }
+            }
+
+            // removed
+            var removedKeys = existingNotNull.Keys.Except(newToggles.Keys);
+            foreach (var removedKey in removedKeys)
+            {
+                updates.Add(new CacheUpdate(removedKey, existingNotNull[removedKey], null));
+            }
+
+            return updates;
+        }
+
         public void Dispose()
         {
             if (_timer != null)
             {
                 _timer.Dispose();
             }
+        }
+    }
+
+    public class CacheUpdatedArgs : EventArgs
+    {
+        public IEnumerable<CacheUpdate> Updates { get; private set; }
+
+        public CacheUpdatedArgs(IEnumerable<CacheUpdate> updates)
+        {
+            Updates = updates;
         }
     }
 }

@@ -4,7 +4,7 @@ namespace HobknobClientNet
 {
     public class HobknobClient : IDisposable
     {
-        public event EventHandler CacheUpdated;
+        public event EventHandler<CacheUpdatedArgs> CacheUpdated;
         public event EventHandler<CacheUpdateFailedArgs> CacheUpdateFailed;
 
         private readonly FeatureToggleCache _featureToggleCache;
@@ -34,7 +34,7 @@ namespace HobknobClientNet
             return _featureToggleCache.Get(featureToggleName).GetValueOrDefault(defaultValue);
         }
 
-        private void RaiseCacheUpdatedEvent(object sender, EventArgs eventArgs)
+        private void RaiseCacheUpdatedEvent(object sender, CacheUpdatedArgs eventArgs)
         {
             if (CacheUpdated != null)
             {
