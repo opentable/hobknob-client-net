@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace HobknobClientNet
 {
-    public class FeatureToggleCache : IDisposable
+    internal class FeatureToggleCache : IDisposable
     {
         public event EventHandler<CacheUpdatedArgs> CacheUpdated;
         public event EventHandler<CacheUpdateFailedArgs> CacheUpdateFailed;

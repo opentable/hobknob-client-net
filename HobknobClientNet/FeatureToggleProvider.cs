@@ -5,7 +5,7 @@ using etcetera;
 
 namespace HobknobClientNet
 {
-    public class FeatureToggleProvider
+    internal class FeatureToggleProvider
     {
         private readonly EtcdClient _etcdClient;
         private readonly string _applicationDirectoryKey;
