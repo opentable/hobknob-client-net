@@ -1,0 +1,18 @@
+<?xml version="1.0"?><package>
+  <metadata>
+    <id>hobknob-client-net</id>
+	<!-- Version is changed via the Package.json file -->
+    <version>1.0.0</version>
+    <authors>OpenTable</authors>
+    <owners>OpenTable</owners>
+    <projectUrl>https://github.com/opentable/hobknob-client-net</projectUrl>
+    <description>A .net client for Hobknob</description>
+    <releaseNotes>First release!</releaseNotes>
+    <copyright>Copyright 2014</copyright>
+    <tags>Feature Toggle Switch Hobknob</tags>
+    <dependencies>
+      <dependency id="etcetera" version="0.5.0"/>
+      <dependency id="RestSharp" version="104.4.0"/>
+    </dependencies>
+  </metadata>
+</package>
