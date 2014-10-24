@@ -3,9 +3,14 @@ using etcetera;
 
 namespace HobknobClientNet
 {
-    public class HobknobClientFactory
+    public interface IHobknobClientFactory
     {
-        public HobknobClient Create(string etcdHost, int etcdPort, string applicationName, TimeSpan cacheUpdateInterval)
+        IHobknobClient Create(string etcdHost, int etcdPort, string applicationName, TimeSpan cacheUpdateInterval);
+    }
+
+    public class HobknobClientFactory : IHobknobClientFactory
+    {
+        public IHobknobClient Create(string etcdHost, int etcdPort, string applicationName, TimeSpan cacheUpdateInterval)
         {
             var applicationDirectoryKey = string.Format("http://{0}:{1}/v2/keys/", etcdHost, etcdPort);
 
