@@ -19,6 +19,7 @@ namespace HobknobClientNet
             _featureToggleCache.CacheUpdateFailed += RaiseCacheUpdateFailedEvent;
         }
 
+        [Obsolete("Get is dangerous and will be removed in a future version. Use GetOrDefault instead")]
         public bool Get(string toggleName)
         {
             var value = _featureToggleCache.Get(toggleName);
