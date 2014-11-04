@@ -1,6 +1,6 @@
 {
   "name": "hobknob-client-net",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A .net client library for Hobknob",
   "company": "OpenTable",
   "main": "Gruntfile.js",
