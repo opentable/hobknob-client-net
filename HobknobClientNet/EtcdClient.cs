@@ -1,62 +1,61 @@
+using System;
+using System.IO;
 using System.Net;
+using System.Text;
 using Newtonsoft.Json;
 
 namespace HobknobClientNet
 {
-    public class EtcdClient
+    internal class EtcdClient
     {
-        readonly string _etcdHost;
-        readonly string _etcdPort;
-        readonly WebClient _webClient;
+        private readonly Uri _keysUri;
 
-        public EtcdClient(string etcdHost, string etcdPort)
+        public EtcdClient(Uri keysUri)
         {
-            _etcdPort = etcdPort;
-            _etcdHost = etcdHost;
-            _webClient = new WebClient();
-            _webClient.Headers.Add("Accept", "application/json");
+            _keysUri = keysUri;
         }
 
-        public EtcdResponse Get(string key)
+        public EtcdResponse Get(Uri relativeKeyUri, bool recursive = true)
         {
-            var fullKeyUrl = string.Format("http://{0}:{1}/v2/keys/{2}", _etcdHost, _etcdPort, key);
-            string etcdResponseJson = _webClient.DownloadString(fullKeyUrl);
-            return JsonConvert.DeserialiseObject<EtcdResponse>(etcdResponseJson);
-        }
-    }
+            var fullKeyUri = new Uri(_keysUri, relativeKeyUri);
+            var fullKeyUriWithQuery = new UriBuilder(fullKeyUri) {Query = "recursive=" + recursive};
+            var webRequest = (HttpWebRequest)WebRequest.Create(fullKeyUriWithQuery.Uri);
+            webRequest.Accept = "application/json";
+            webRequest.UserAgent = "Hobknob-test";
 
-    public class EtcdResponse
-    {
-        public EtcdResponse()
+            try
+            {
+                using (var webResponse = webRequest.GetResponse())
+                {
+                    return GetEtcdResponse(webResponse);
+                }
+            }
+            catch (WebException ex)
+            {
+                if (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+                throw;
+            }
+
+        }
+
+        private static EtcdResponse GetEtcdResponse(WebResponse webResponse)
         {
-            Headers = new EtcdHeaders();
+            string etcdResponseJson;
+            using (var responseStream = webResponse.GetResponseStream())
+            using (var reader = new StreamReader(responseStream, Encoding.UTF8))
+            {
+                etcdResponseJson = reader.ReadToEnd();
+            }
+
+            return JsonConvert.DeserializeObject<EtcdResponse>(etcdResponseJson);
         }
 
-        public string Action { get; set; }
-        public Node Node { get; set; }
-
-        public int? ErrorCode { get; set; }
-        public string Cause { get; set; }
-        public int? Index { get; set; }
-        public string Message { get; set; }
-    }
-
-    public class EtcdHeaders
-    {
-        public int EtcdIndex { get; set; }
-        public int? RaftIndex { get; set; }
-        public int? RaftTerm { get; set; }
-    }
-
-    public class Node
-    {
-        public int CreatedIndex { get; set; }
-        public string Key { get; set; }
-        public int ModifiedIndex { get; set; }
-        public string Value { get; set; }
-        public int? Ttl { get; set; }
-        public DateTime? Expiration { get; set; }
-        public List<Node> Nodes { get; set; }
-        public bool Dir { get; set; }
+        protected Uri GetFullUri(Uri relativeUri)
+        {
+            return new Uri(_keysUri, relativeUri);
+        }
     }
 }

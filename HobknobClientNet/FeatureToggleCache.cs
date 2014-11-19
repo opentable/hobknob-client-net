@@ -36,10 +36,12 @@ namespace HobknobClientNet
             _timer = new Timer(UpdateCacheTick, null, _updateInterval, _updateInterval);
         }
 
-        public bool? Get(string featureToggleName)
+        public bool? Get(string applicationName, string featureName, string toggleName = null)
         {
+            var toggleSuffix = toggleName != null ? "/" + toggleName : string.Empty;
+            var featureToggleKey = string.Format("/v1/toggles/{0}/{1}{2}", applicationName, featureName, toggleSuffix);
             bool value;
-            return _cache.TryGetValue(featureToggleName, out value) ? value : (bool?)null;
+            return _cache.TryGetValue(featureToggleKey, out value) ? value : (bool?)null;
         }
 
         private bool UpdateCache(out Exception exception)

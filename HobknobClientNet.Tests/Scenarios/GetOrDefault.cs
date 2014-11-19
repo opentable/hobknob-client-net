@@ -3,7 +3,7 @@
 namespace HobknobClientNet.Tests.Scenarios
 {
     [TestFixture]
-    public class GetOrDefault : TestBase
+    internal class GetOrDefault : TestBase
     {
         bool? _toggleValue;
 

@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using etcetera;
 using NUnit.Framework;
 
 namespace HobknobClientNet.Tests.Scenarios
 {
-    public class TestBase
+    internal class TestBase
     {
-        protected readonly EtcdClient EtcdClient;
+        protected readonly EtcdClientForTests EtcdClient;
         private HobknobClient _hobknobClient;
         private string _applicationName;
 
-        private const string EtcdHost = "127.0.0.1";
+        private const string EtcdHost = "192.168.7.51";
         private const int EtcdPort = 4001;
 
         private readonly HashSet<string> _applicationKeysToClearOnTearDown = new HashSet<string>();
@@ -19,7 +18,7 @@ namespace HobknobClientNet.Tests.Scenarios
 
         protected TestBase()
         {
-            EtcdClient = new EtcdClient(new Uri(string.Format("http://{0}:{1}/v2/keys/", EtcdHost, EtcdPort)));
+            EtcdClient = new EtcdClientForTests(new Uri(string.Format("http://{0}:{1}/v2/keys/", EtcdHost, EtcdPort)));
         }
 
         [TearDown]
@@ -32,7 +31,7 @@ namespace HobknobClientNet.Tests.Scenarios
 
             foreach (var application in _applicationKeysToClearOnTearDown)
             {
-                EtcdClient.DeleteDir("v1/toggles/" + application, true);
+                EtcdClient.DeleteDir(new Uri("v1/toggles/" + application + "/", UriKind.Relative));
             }
             _applicationKeysToClearOnTearDown.Clear();
         }
@@ -50,14 +49,14 @@ namespace HobknobClientNet.Tests.Scenarios
         protected void Given_a_toggle(string applicationName, string toggleName, string value)
         {
             var key = string.Format("v1/toggles/{0}/{1}", applicationName, toggleName);
-            EtcdClient.Set(key, value);
+            EtcdClient.Set(new Uri(key, UriKind.Relative), value);
             _applicationKeysToClearOnTearDown.Add(applicationName);
         }
 
         protected void Given_a_toggle_is_removed(string applicationName, string toggleName)
         {
             var key = string.Format("v1/toggles/{0}/{1}", applicationName, toggleName);
-            EtcdClient.Delete(key);
+            EtcdClient.Delete(new Uri(key, UriKind.Relative));
         }
 
         protected void When_I_get(string toggleName, out bool? value)

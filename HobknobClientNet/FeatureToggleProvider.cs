@@ -1,44 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using etcetera;
 
 namespace HobknobClientNet
 {
     internal class FeatureToggleProvider
     {
         private readonly EtcdClient _etcdClient;
-        private readonly string _applicationDirectoryKey;
+        private readonly Uri _applicationDirectoryKey;
 
         public FeatureToggleProvider(EtcdClient etcdClient, string applicationName)
         {
             _etcdClient = etcdClient;
-            _applicationDirectoryKey = string.Format("v1/toggles/{0}", applicationName);
+            _applicationDirectoryKey = new Uri(string.Format("v1/toggles/{0}", applicationName), UriKind.Relative);
         }
 
         public IEnumerable<KeyValuePair<string, bool>> Get()
         {
             var etcdResponse = _etcdClient.Get(_applicationDirectoryKey);
 
-            if (etcdResponse.ErrorCode.HasValue)
+            if (etcdResponse == null)
             {
-                const int keyNotFoundEtcdErrorCode = 100;
-                if (etcdResponse.ErrorCode == keyNotFoundEtcdErrorCode)
-                {
-                    return Enumerable.Empty<KeyValuePair<string, bool>>();
-                }
-                throw new Exception("Error getting toggles from etcd: " + etcdResponse.Message);
+                return Enumerable.Empty<KeyValuePair<string, bool>>();
             }
 
             return etcdResponse.Node.Nodes
-                .Select(node => new { Key = GetKey(node.Key), Value = ParseFeatureToggleValue(node.Key, node.Value) })
+                .Select(node =>
+                {
+                    if (node.Dir)
+                    {
+                        return node.Nodes
+                            .Where(x => !x.Key.EndsWith("/@meta"))
+                            .Select(x => new KeyValuePair<string, bool?>(x.Key,
+                                ParseFeatureToggleValue(x.Key, x.Value)))
+                            .ToArray();
+                    }
+                    return new[]
+                    {
+                        new KeyValuePair<string, bool?>(node.Key,
+                            ParseFeatureToggleValue(node.Key, node.Value))
+                    };
+                })
+                .SelectMany(x => x)
                 .Where(pair => pair.Value.HasValue)
                 .Select(pair => new KeyValuePair<string, bool>(pair.Key, pair.Value.Value));
-        }
-
-        private static string GetKey(string path)
-        {
-            return path.Split('/').Last();
         }
 
         private static bool? ParseFeatureToggleValue(string key, string value)

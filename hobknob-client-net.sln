@@ -12,8 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A906B8
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobknobClientNet.etcetera", "HobknobClientNet.etcetera\HobknobClientNet.etcetera.csproj", "{FDD68D70-0708-427F-A3F3-7296CDB8CB52}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,10 +26,6 @@ Global
 		{75F6E833-E312-40D9-AA46-22D1A90CFFDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75F6E833-E312-40D9-AA46-22D1A90CFFDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75F6E833-E312-40D9-AA46-22D1A90CFFDF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FDD68D70-0708-427F-A3F3-7296CDB8CB52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FDD68D70-0708-427F-A3F3-7296CDB8CB52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FDD68D70-0708-427F-A3F3-7296CDB8CB52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FDD68D70-0708-427F-A3F3-7296CDB8CB52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

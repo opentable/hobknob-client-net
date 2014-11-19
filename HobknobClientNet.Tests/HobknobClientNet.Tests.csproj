@@ -44,6 +44,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EtcdClientForTests.cs" />
     <Compile Include="Scenarios\CacheUpdates.cs" />
     <Compile Include="Scenarios\GetOrDefault.cs" />
     <Compile Include="Scenarios\Get.cs" />
@@ -51,10 +52,6 @@
     <Compile Include="Scenarios\TestBase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HobknobClientNet.etcetera\HobknobClientNet.etcetera.csproj">
-      <Project>{fdd68d70-0708-427f-a3f3-7296cdb8cb52}</Project>
-      <Name>HobknobClientNet.etcetera</Name>
-    </ProjectReference>
     <ProjectReference Include="..\HobknobClientNet\HobknobClientNet.csproj">
       <Project>{0aba6365-c6bb-4596-9782-281994eb3256}</Project>
       <Name>HobknobClientNet</Name>
