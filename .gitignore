@@ -178,3 +178,5 @@ FakesAssemblies/
 
 !Build/nunit/bin/
 !Build/nunit/bin/*
+
+*.userprefs
