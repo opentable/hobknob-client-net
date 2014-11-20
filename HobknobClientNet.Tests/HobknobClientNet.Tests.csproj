@@ -46,8 +46,8 @@
   <ItemGroup>
     <Compile Include="EtcdClientForTests.cs" />
     <Compile Include="Scenarios\CacheUpdates.cs" />
-    <Compile Include="Scenarios\GetOrDefault.cs" />
-    <Compile Include="Scenarios\Get.cs" />
+    <Compile Include="Scenarios\GetOrDefault_MultiFeatureToggle.cs" />
+    <Compile Include="Scenarios\GetOrDefault_SimpleFeature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenarios\TestBase.cs" />
   </ItemGroup>

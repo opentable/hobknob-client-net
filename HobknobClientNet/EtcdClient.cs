@@ -17,11 +17,10 @@ namespace HobknobClientNet
 
         public EtcdResponse Get(Uri relativeKeyUri, bool recursive = true)
         {
-            var fullKeyUri = new Uri(_keysUri, relativeKeyUri);
-            var fullKeyUriWithQuery = new UriBuilder(fullKeyUri) {Query = "recursive=" + recursive};
+            var fullKeyUriWithQuery = new UriBuilder(GetFullUri(relativeKeyUri)) { Query = "recursive=" + recursive };
             var webRequest = (HttpWebRequest)WebRequest.Create(fullKeyUriWithQuery.Uri);
             webRequest.Accept = "application/json";
-            webRequest.UserAgent = "Hobknob-test";
+            webRequest.UserAgent = "hobknob-client-net";
 
             try
             {
@@ -38,7 +37,6 @@ namespace HobknobClientNet
                 }
                 throw;
             }
-
         }
 
         private static EtcdResponse GetEtcdResponse(WebResponse webResponse)

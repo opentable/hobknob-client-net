@@ -30,27 +30,27 @@ namespace HobknobClientNet.Tests.Scenarios
         [Test]
         public void Cache_is_not_updated_when_update_interval_is_not_passed()
         {
-            Given_a_toggle(ApplicationName, "toggle1", "true");
-            When_I_get("toggle1", out _toggleValue);
+            Given_a_toggle(ApplicationName, "feature1", "true");
+            When_I_get_with_default("feature1", false, out _toggleValue);
             Assert.That(_toggleValue, Is.True);
 
-            Given_a_toggle(ApplicationName, "toggle1", "false");
+            Given_a_toggle(ApplicationName, "feature1", "false");
 
-            When_I_get_without_initialising_a_new_hobknob_instance("toggle1", out _toggleValue);
+            When_I_get_with_default_without_initialising_a_new_hobknob_instance("feature1", out _toggleValue);
             Assert.That(_toggleValue, Is.True);
         }
 
         [Test]
         public void Cache_is_updated_when_update_interval_is_passed()
         {
-            Given_a_toggle(ApplicationName, "toggle1", "true");
-            When_I_get("toggle1", out _toggleValue);
+            Given_a_toggle(ApplicationName, "feature1", "true");
+            When_I_get_with_default("feature1", false, out _toggleValue);
             Assert.That(_toggleValue, Is.True);
 
-            Given_a_toggle(ApplicationName, "toggle1", "false");
+            Given_a_toggle(ApplicationName, "feature1", "false");
             Thread.Sleep(TimeSpan.FromSeconds(1.2));
 
-            When_I_get_without_initialising_a_new_hobknob_instance("toggle1", out _toggleValue);
+            When_I_get_with_default_without_initialising_a_new_hobknob_instance("feature1", out _toggleValue);
             Assert.That(_toggleValue, Is.False);
         }
 

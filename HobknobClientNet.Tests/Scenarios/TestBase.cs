@@ -46,9 +46,15 @@ namespace HobknobClientNet.Tests.Scenarios
             _cacheUpdateInterval = cacheUpdateInterval;
         }
 
-        protected void Given_a_toggle(string applicationName, string toggleName, string value)
+        protected void Given_a_toggle(string applicationName, string featureName, string value)
         {
-            var key = string.Format("v1/toggles/{0}/{1}", applicationName, toggleName);
+            Given_a_toggle(applicationName, featureName, null, value);
+        }
+
+        protected void Given_a_toggle(string applicationName, string featureName, string toggleName, string value)
+        {
+            var toggleSuffix = toggleName != null ? "/" + toggleName : string.Empty;
+            var key = string.Format("v1/toggles/{0}/{1}{2}", applicationName, featureName, toggleSuffix);
             EtcdClient.Set(new Uri(key, UriKind.Relative), value);
             _applicationKeysToClearOnTearDown.Add(applicationName);
         }
@@ -59,21 +65,20 @@ namespace HobknobClientNet.Tests.Scenarios
             EtcdClient.Delete(new Uri(key, UriKind.Relative));
         }
 
-        protected void When_I_get(string toggleName, out bool? value)
+        protected void When_I_get_with_default(string featureName, bool defaultValue, out bool? value)
         {
-            _hobknobClient = new HobknobClientFactory().Create(EtcdHost, EtcdPort, _applicationName, _cacheUpdateInterval);
-            value = _hobknobClient.Get(toggleName);
+            When_I_get_with_default(featureName, null, defaultValue, out value);
         }
 
-        protected void When_I_get_without_initialising_a_new_hobknob_instance(string toggleName, out bool? value)
+        protected void When_I_get_with_default(string featureName, string toggleName, bool defaultValue,  out bool? value)
         {
-            value = _hobknobClient.Get(toggleName);
+            _hobknobClient = new HobknobClientFactory().Create(EtcdHost, EtcdPort, _applicationName, TimeSpan.FromSeconds(1));
+            value = _hobknobClient.GetOrDefault(featureName, toggleName, defaultValue);
         }
 
-        protected void When_I_get_with_default(string toggleName, bool defaultValue,  out bool? value)
+        protected void When_I_get_with_default_without_initialising_a_new_hobknob_instance(string featureName, out bool? value)
         {
-            _hobknobClient = new HobknobClientFactory().Create(EtcdHost, EtcdPort, _applicationName, TimeSpan.FromMinutes(1));
-            value = _hobknobClient.GetOrDefault(toggleName, defaultValue);
+            value = _hobknobClient.GetOrDefault(featureName, false);
         }
 
         protected HobknobClient Create_hobknob_client()
