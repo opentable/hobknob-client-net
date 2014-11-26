@@ -35,9 +35,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RestSharp, Version=105.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RestSharp.105.0.0\lib\net4\RestSharp.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,17 +45,14 @@
     <Compile Include="CacheUpdate.cs" />
     <Compile Include="CacheUpdatedArgs.cs" />
     <Compile Include="CacheUpdateFailedArgs.cs" />
+    <Compile Include="EtcdClient.cs" />
+    <Compile Include="EtcdResponse.cs" />
     <Compile Include="FeatureToggleCache.cs" />
     <Compile Include="FeatureToggleProvider.cs" />
     <Compile Include="HobknobClient.cs" />
     <Compile Include="HobknobClientFactory.cs" />
+    <Compile Include="Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HobknobClientNet.etcetera\HobknobClientNet.etcetera.csproj">
-      <Project>{fdd68d70-0708-427f-a3f3-7296cdb8cb52}</Project>
-      <Name>HobknobClientNet.etcetera</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
