@@ -16,7 +16,7 @@ module.exports = function (grunt) {
 					files: [
 						{
 							expand: true,
-							cwd: 'HobknobClientNet/bin/Release/',
+							cwd: 'merged_dlls',
               src: ['**'],
 							dest: 'build_output/lib/'
 						}

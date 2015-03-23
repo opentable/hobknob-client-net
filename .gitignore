@@ -180,3 +180,5 @@ FakesAssemblies/
 !Build/nunit/bin/*
 
 *.userprefs
+
+merged_dlls
