@@ -65,6 +65,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>mkdir "$(SolutionDir)merged_dlls"
+"$(SolutionDir)packages\ilmerge.2.14.1208\tools\ILMerge.exe" /out:"$(SolutionDir)merged_dlls\$(TargetName).dll" "$(TargetDir)*.dll" /target:dll /targetplatform:v4,C:\Windows\Microsoft.NET\Framework64\v4.0.30319 /wildcards</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
