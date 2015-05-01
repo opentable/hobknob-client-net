@@ -31,7 +31,7 @@ namespace HobknobClientNet
             }
             catch (WebException ex)
             {
-                if (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.NotFound)
+                if (ex.Response != null && ((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.NotFound)
                 {
                     return null;
                 }

@@ -6,12 +6,12 @@ namespace HobknobClientNet.Tests.Scenarios
 {
     internal class TestBase
     {
-        protected readonly EtcdClientForTests EtcdClient;
-        private HobknobClient _hobknobClient;
+        protected EtcdClientForTests EtcdClient;
+        protected HobknobClient HobknobClient;
         private string _applicationName;
 
-        private const string EtcdHost = "192.168.7.51";
-        private const int EtcdPort = 4001;
+        protected const string EtcdHost = "192.168.0.8";
+        protected const int EtcdPort = 4001;
 
         private readonly HashSet<string> _applicationKeysToClearOnTearDown = new HashSet<string>();
         private TimeSpan _cacheUpdateInterval = TimeSpan.FromMinutes(1);
@@ -24,9 +24,9 @@ namespace HobknobClientNet.Tests.Scenarios
         [TearDown]
         public void TearDown()
         {
-            if (_hobknobClient != null)
+            if (HobknobClient != null)
             {
-                _hobknobClient.Dispose();
+                HobknobClient.Dispose();
             }
 
             foreach (var application in _applicationKeysToClearOnTearDown)
@@ -72,19 +72,19 @@ namespace HobknobClientNet.Tests.Scenarios
 
         protected void When_I_get_with_default(string featureName, string toggleName, bool defaultValue,  out bool? value)
         {
-            _hobknobClient = new HobknobClientFactory().Create(EtcdHost, EtcdPort, _applicationName, TimeSpan.FromSeconds(1));
-            value = _hobknobClient.GetOrDefault(featureName, toggleName, defaultValue);
+            HobknobClient = new HobknobClientFactory().Create(EtcdHost, EtcdPort, _applicationName, TimeSpan.FromSeconds(1));
+            value = HobknobClient.GetOrDefault(featureName, toggleName, defaultValue);
         }
 
         protected void When_I_get_with_default_without_initialising_a_new_hobknob_instance(string featureName, out bool? value)
         {
-            value = _hobknobClient.GetOrDefault(featureName, false);
+            value = HobknobClient.GetOrDefault(featureName, false);
         }
 
-        protected HobknobClient Create_hobknob_client()
+        protected HobknobClient Create_hobknob_client(string etcdHost = EtcdHost)
         {
-            _hobknobClient = new HobknobClientFactory().Create(EtcdHost, EtcdPort, _applicationName, _cacheUpdateInterval);
-            return _hobknobClient;
+            HobknobClient = new HobknobClientFactory().Create(etcdHost, EtcdPort, _applicationName, _cacheUpdateInterval);
+            return HobknobClient;
         }
     }
 }
