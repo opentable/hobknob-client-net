@@ -19,7 +19,7 @@ namespace HobknobClientNet
         {
             var etcdResponse = _etcdClient.Get(_applicationDirectoryKey);
 
-            if (etcdResponse == null)
+            if (etcdResponse == null || etcdResponse.Node.Nodes == null)
             {
                 return Enumerable.Empty<KeyValuePair<string, bool>>();
             }
