@@ -7,7 +7,7 @@ namespace HobknobClientNet.Tests.Scenarios
     internal class TestBase
     {
         protected EtcdClientForTests EtcdClient;
-        protected HobknobClient HobknobClient;
+        protected IHobknobClient HobknobClient;
         private string _applicationName;
 
         protected const string EtcdHost = "192.168.0.8";
@@ -81,7 +81,7 @@ namespace HobknobClientNet.Tests.Scenarios
             value = HobknobClient.GetOrDefault(featureName, false);
         }
 
-        protected HobknobClient Create_hobknob_client(string etcdHost = EtcdHost)
+        protected IHobknobClient Create_hobknob_client(string etcdHost = EtcdHost)
         {
             HobknobClient = new HobknobClientFactory().Create(etcdHost, EtcdPort, _applicationName, _cacheUpdateInterval);
             return HobknobClient;

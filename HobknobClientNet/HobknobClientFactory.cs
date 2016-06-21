@@ -4,7 +4,7 @@ namespace HobknobClientNet
 {
     public class HobknobClientFactory
     {
-        public HobknobClient Create(string etcdHost, int etcdPort, string applicationName, TimeSpan cacheUpdateInterval)
+        public IHobknobClient Create(string etcdHost, int etcdPort, string applicationName, TimeSpan cacheUpdateInterval)
         {
             var etcdKeysPath = string.Format("http://{0}:{1}/v2/keys/", etcdHost, etcdPort);
 

@@ -2,7 +2,15 @@
 
 namespace HobknobClientNet
 {
-    public class HobknobClient : IDisposable
+    public interface IHobknobClient : IDisposable
+    {
+        event EventHandler<CacheUpdatedArgs> CacheUpdated;
+        event EventHandler<CacheUpdateFailedArgs> CacheUpdateFailed;
+        bool GetOrDefault(string featureName, bool defaultValue);
+        bool GetOrDefault(string featureName, string toggleName, bool defaultValue);
+    }
+
+    public class HobknobClient : IHobknobClient
     {
         public event EventHandler<CacheUpdatedArgs> CacheUpdated;
         public event EventHandler<CacheUpdateFailedArgs> CacheUpdateFailed;
