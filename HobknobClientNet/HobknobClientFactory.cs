@@ -2,7 +2,12 @@
 
 namespace HobknobClientNet
 {
-    public class HobknobClientFactory
+    public interface IHobknobClientFactory
+    {
+        IHobknobClient Create(string etcdHost, int etcdPort, string applicationName, TimeSpan cacheUpdateInterval);
+    }
+
+    public class HobknobClientFactory : IHobknobClientFactory
     {
         public IHobknobClient Create(string etcdHost, int etcdPort, string applicationName, TimeSpan cacheUpdateInterval)
         {
