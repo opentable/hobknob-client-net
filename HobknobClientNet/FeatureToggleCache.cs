@@ -28,11 +28,7 @@ namespace HobknobClientNet
 
         public void Initialize()
         {
-            Exception exception;
-            if (!UpdateCache(out exception))
-            {
-                throw exception;
-            }
+            UpdateCache();
             _timer = new Timer(UpdateCacheTick, null, _updateInterval, _updateInterval);
         }
 
@@ -44,7 +40,7 @@ namespace HobknobClientNet
             return _cache.TryGetValue(featureToggleKey, out value) ? value : (bool?)null;
         }
 
-        private bool UpdateCache(out Exception exception)
+        private bool UpdateCache()
         {
             Dictionary<string, bool> featureToggles;
             try
@@ -53,32 +49,19 @@ namespace HobknobClientNet
             }
             catch (Exception ex)
             {
-                if (CacheUpdateFailed != null)
-                {
-                    CacheUpdateFailed(this, new CacheUpdateFailedArgs(ex));
-                }
-
-                exception = ex;
+                CacheUpdateFailed?.Invoke(this, new CacheUpdateFailedArgs(ex));
                 return false;
             }
 
             var updates = GetUpdates(_cache, featureToggles);
-
             _cache = featureToggles;
-
-            if (CacheUpdated != null)
-            {
-                CacheUpdated(this, new CacheUpdatedArgs(updates));
-            }
-
-            exception = null;
+            CacheUpdated?.Invoke(this, new CacheUpdatedArgs(updates));
             return true;
         }
 
         private void UpdateCacheTick(object _)
         {
-            Exception ignore;
-            UpdateCache(out ignore);
+            UpdateCache();
         }
 
         private static IEnumerable<CacheUpdate> GetUpdates(Dictionary<string, bool> existingToggles, Dictionary<string, bool> newToggles)

@@ -61,7 +61,7 @@ namespace HobknobClientNet.Tests.Scenarios
             Given_a_toggle(ApplicationName, "existingChange", "true");
             Given_a_toggle(ApplicationName, "existingRemoved", "true");
 
-            var hobknobClient = Create_hobknob_client();
+            var hobknobClient = Create_hobknob_client(Create_exception_throwing_error_handler());
 
             Given_a_toggle(ApplicationName, "newToggle", "true");
             Given_a_toggle(ApplicationName, "existingChange", "false");

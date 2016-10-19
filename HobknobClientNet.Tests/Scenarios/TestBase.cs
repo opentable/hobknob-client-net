@@ -10,8 +10,8 @@ namespace HobknobClientNet.Tests.Scenarios
         protected IHobknobClient HobknobClient;
         private string _applicationName;
 
-        protected const string EtcdHost = "192.168.0.8";
-        protected const int EtcdPort = 4001;
+        protected const string EtcdHost = "127.0.0.1";
+        protected const int EtcdPort = 2379;
 
         private readonly HashSet<string> _applicationKeysToClearOnTearDown = new HashSet<string>();
         private TimeSpan _cacheUpdateInterval = TimeSpan.FromMinutes(1);
@@ -72,7 +72,10 @@ namespace HobknobClientNet.Tests.Scenarios
 
         protected void When_I_get_with_default(string featureName, string toggleName, bool defaultValue,  out bool? value)
         {
-            HobknobClient = new HobknobClientFactory().Create(EtcdHost, EtcdPort, _applicationName, TimeSpan.FromSeconds(1));
+            HobknobClient = new HobknobClientFactory().Create(EtcdHost, EtcdPort, _applicationName, TimeSpan.FromSeconds(1), delegate (object o, CacheUpdateFailedArgs args)
+            {
+                throw args.Exception;
+            });
             value = HobknobClient.GetOrDefault(featureName, toggleName, defaultValue);
         }
 
@@ -81,10 +84,18 @@ namespace HobknobClientNet.Tests.Scenarios
             value = HobknobClient.GetOrDefault(featureName, false);
         }
 
-        protected IHobknobClient Create_hobknob_client(string etcdHost = EtcdHost)
+        protected IHobknobClient Create_hobknob_client(EventHandler<CacheUpdateFailedArgs> errorHandler, string etcdHost = EtcdHost)
         {
-            HobknobClient = new HobknobClientFactory().Create(etcdHost, EtcdPort, _applicationName, _cacheUpdateInterval);
+            HobknobClient = new HobknobClientFactory().Create(etcdHost, EtcdPort, _applicationName, _cacheUpdateInterval, errorHandler);
             return HobknobClient;
+        }
+
+        protected EventHandler<CacheUpdateFailedArgs> Create_exception_throwing_error_handler()
+        {
+            return delegate(object o, CacheUpdateFailedArgs args)
+            {
+                throw args.Exception;
+            };
         }
     }
 }
