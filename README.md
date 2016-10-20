@@ -17,8 +17,9 @@ var etcdHost = "localhost";
 var etcdPort = 4001;
 var applicationName = "radApp";
 var cacheUpdateInterval = TimeSpan.FromSeconds(180);
+EventHandler<CacheUpdateFailedArgs> cacheUpdateFailed = (o, args) => { throw args.Exception; }; 
 
-var client = new HobknobClientFactory().Create(etcdHost, etcdPort, applicationName, cacheUpdateInterval);
+var client = new HobknobClientFactory().Create(etcdHost, etcdPort, applicationName, cacheUpdateInterval, cacheUpdateFailed);
 
 var toggleValue1 = client.GetOrDefault("Feature1", true); // Feature1 is false => false
 var toggleValue2 = client.GetOrDefault("Feature2", true); // Feature2 does not exist => true
@@ -38,6 +39,7 @@ Creates a new feature toggle client.
 - `etcdPort` the port of the Etcd instance
 - `applicationName` the name of the application used to find feature toggles
 - `cacheUpdateInterval` interval for the cache update, which loads all the applications toggles into memory
+- `cacheUpdateFailed` delegate called whenever there is issue updating local hobknob cache. Must not be null for your own good.
 
 
 ### client.GetOrDefault(string featureName, bool defaultValue)
@@ -76,7 +78,7 @@ client.CacheUpdated += (sender, eventArgs) => { console.Write("Updated"); }
 
 ### client.CacheUpdateFailed
 
-An event which is raised when there is an error updating the cache
+An event which is raised when there is an error updating the cache. This is the same event as the one that is registered in Create method.
 
 ```c#
 

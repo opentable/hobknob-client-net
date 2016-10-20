@@ -82,7 +82,7 @@ namespace HobknobClientNet.Tests.Scenarios
 
         protected void When_I_get_with_default(string etcdHost, string featureName, string toggleName, bool defaultValue, out bool? value)
         {
-            HobknobClient = new HobknobClientFactory().Create(etcdHost, EtcdPort, _applicationName, TimeSpan.FromSeconds(1), delegate {});
+            HobknobClient = new HobknobClientFactory().Create(etcdHost, EtcdPort, _applicationName, TimeSpan.FromSeconds(1), (o, args) => {});
             value = HobknobClient.GetOrDefault(featureName, toggleName, defaultValue);
         }
 
@@ -99,10 +99,7 @@ namespace HobknobClientNet.Tests.Scenarios
 
         protected EventHandler<CacheUpdateFailedArgs> Create_exception_throwing_error_handler()
         {
-            return delegate(object o, CacheUpdateFailedArgs args)
-            {
-                throw args.Exception;
-            };
+            return (o, args) => { throw args.Exception; };
         }
     }
 }

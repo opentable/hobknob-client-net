@@ -47,10 +47,7 @@ namespace HobknobClientNet.Tests.Scenarios
         public void Initialises_ok_on_network_error_and_error_handler_gets_called()
         {
             var errorsCounter = 0;            
-            HobknobClient = Create_hobknob_client(delegate
-            {
-                errorsCounter++;
-            }, "bad_host");
+            HobknobClient = Create_hobknob_client((sender, eventArgs) => { errorsCounter++; }, "bad_host");
             Assert.That(errorsCounter, Is.EqualTo(1));
         }
     }
