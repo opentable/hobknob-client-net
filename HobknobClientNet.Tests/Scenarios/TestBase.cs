@@ -67,15 +67,22 @@ namespace HobknobClientNet.Tests.Scenarios
 
         protected void When_I_get_with_default(string featureName, bool defaultValue, out bool? value)
         {
-            When_I_get_with_default(featureName, null, defaultValue, out value);
+            When_I_get_with_default(EtcdHost, featureName, null, defaultValue, out value);
         }
 
-        protected void When_I_get_with_default(string featureName, string toggleName, bool defaultValue,  out bool? value)
+        protected void When_I_get_with_default_and_host(string etcdHost, string featureName, bool defaultValue, out bool? value)
         {
-            HobknobClient = new HobknobClientFactory().Create(EtcdHost, EtcdPort, _applicationName, TimeSpan.FromSeconds(1), delegate (object o, CacheUpdateFailedArgs args)
-            {
-                throw args.Exception;
-            });
+            When_I_get_with_default(etcdHost, featureName, null, defaultValue, out value);
+        }
+
+        protected void When_I_get_with_default(string featureName, string toggleName, bool defaultValue, out bool? value)
+        {
+            When_I_get_with_default(EtcdHost, featureName, toggleName, defaultValue, out value);
+        }
+
+        protected void When_I_get_with_default(string etcdHost, string featureName, string toggleName, bool defaultValue, out bool? value)
+        {
+            HobknobClient = new HobknobClientFactory().Create(etcdHost, EtcdPort, _applicationName, TimeSpan.FromSeconds(1), delegate {});
             value = HobknobClient.GetOrDefault(featureName, toggleName, defaultValue);
         }
 

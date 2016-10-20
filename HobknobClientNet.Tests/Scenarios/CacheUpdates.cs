@@ -22,7 +22,7 @@ namespace HobknobClientNet.Tests.Scenarios
         }
 
         [TearDown]
-        public void TearDown()
+        public new void TearDown()
         {
             EtcdClient.DeleteDir(new Uri("v1/toggles/cacheUpdateTest/", UriKind.Relative));
         }

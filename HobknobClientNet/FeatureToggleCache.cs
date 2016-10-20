@@ -37,7 +37,7 @@ namespace HobknobClientNet
             var toggleSuffix = toggleName != null ? "/" + toggleName : string.Empty;
             var featureToggleKey = string.Format("/v1/toggles/{0}/{1}{2}", applicationName, featureName, toggleSuffix);
             bool value;
-            return _cache.TryGetValue(featureToggleKey, out value) ? value : (bool?)null;
+            return _cache != null && _cache.TryGetValue(featureToggleKey, out value) ? value : (bool?)null;
         }
 
         private bool UpdateCache()
