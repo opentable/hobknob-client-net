@@ -30,6 +30,13 @@ namespace HobknobClientNet.Tests.Scenarios
         }
 
         [Test]
+        public void Default_is_used_when_host_cannot_be_reached()
+        {
+            When_I_get_with_default_and_host("bad_host","feature3", true, out _toggleValue);
+            Assert.That(_toggleValue, Is.True);
+        }
+
+        [Test]
         public void Applications_do_not_clash()
         {
             Given_a_toggle("app1", "feature1", "true");

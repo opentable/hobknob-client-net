@@ -10,8 +10,8 @@ namespace HobknobClientNet.Tests.Scenarios
         protected IHobknobClient HobknobClient;
         private string _applicationName;
 
-        protected const string EtcdHost = "192.168.0.8";
-        protected const int EtcdPort = 4001;
+        protected const string EtcdHost = "127.0.0.1";
+        protected const int EtcdPort = 2379;
 
         private readonly HashSet<string> _applicationKeysToClearOnTearDown = new HashSet<string>();
         private TimeSpan _cacheUpdateInterval = TimeSpan.FromMinutes(1);
@@ -67,12 +67,22 @@ namespace HobknobClientNet.Tests.Scenarios
 
         protected void When_I_get_with_default(string featureName, bool defaultValue, out bool? value)
         {
-            When_I_get_with_default(featureName, null, defaultValue, out value);
+            When_I_get_with_default(EtcdHost, featureName, null, defaultValue, out value);
         }
 
-        protected void When_I_get_with_default(string featureName, string toggleName, bool defaultValue,  out bool? value)
+        protected void When_I_get_with_default_and_host(string etcdHost, string featureName, bool defaultValue, out bool? value)
         {
-            HobknobClient = new HobknobClientFactory().Create(EtcdHost, EtcdPort, _applicationName, TimeSpan.FromSeconds(1));
+            When_I_get_with_default(etcdHost, featureName, null, defaultValue, out value);
+        }
+
+        protected void When_I_get_with_default(string featureName, string toggleName, bool defaultValue, out bool? value)
+        {
+            When_I_get_with_default(EtcdHost, featureName, toggleName, defaultValue, out value);
+        }
+
+        protected void When_I_get_with_default(string etcdHost, string featureName, string toggleName, bool defaultValue, out bool? value)
+        {
+            HobknobClient = new HobknobClientFactory().Create(etcdHost, EtcdPort, _applicationName, TimeSpan.FromSeconds(1), (o, args) => {});
             value = HobknobClient.GetOrDefault(featureName, toggleName, defaultValue);
         }
 
@@ -81,10 +91,15 @@ namespace HobknobClientNet.Tests.Scenarios
             value = HobknobClient.GetOrDefault(featureName, false);
         }
 
-        protected IHobknobClient Create_hobknob_client(string etcdHost = EtcdHost)
+        protected IHobknobClient Create_hobknob_client(EventHandler<CacheUpdateFailedArgs> errorHandler, string etcdHost = EtcdHost)
         {
-            HobknobClient = new HobknobClientFactory().Create(etcdHost, EtcdPort, _applicationName, _cacheUpdateInterval);
+            HobknobClient = new HobknobClientFactory().Create(etcdHost, EtcdPort, _applicationName, _cacheUpdateInterval, errorHandler);
             return HobknobClient;
+        }
+
+        protected EventHandler<CacheUpdateFailedArgs> Create_exception_throwing_error_handler()
+        {
+            return (o, args) => { throw args.Exception; };
         }
     }
 }
