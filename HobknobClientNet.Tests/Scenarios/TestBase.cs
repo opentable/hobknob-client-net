@@ -91,6 +91,12 @@ namespace HobknobClientNet.Tests.Scenarios
             value = HobknobClient.GetOrDefault(featureName, false);
         }
 
+        protected void When_I_get_all_the_toggles(out Dictionary<string, bool> toggles)
+        {
+            HobknobClient = new HobknobClientFactory().Create(EtcdHost, EtcdPort, _applicationName, TimeSpan.FromSeconds(1), (o, args) => { });
+            toggles = HobknobClient.GetAll();
+        }
+
         protected IHobknobClient Create_hobknob_client(EventHandler<CacheUpdateFailedArgs> errorHandler, string etcdHost = EtcdHost)
         {
             HobknobClient = new HobknobClientFactory().Create(etcdHost, EtcdPort, _applicationName, _cacheUpdateInterval, errorHandler);

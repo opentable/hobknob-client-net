@@ -31,13 +31,13 @@ namespace HobknobClientNet
                     {
                         return node.Nodes
                             .Where(x => !x.Key.EndsWith("/@meta"))
-                            .Select(x => new KeyValuePair<string, bool?>(x.Key,
+                            .Select(x => new KeyValuePair<string, bool?>(ExtractFeatureToggleName(x.Key),
                                 ParseFeatureToggleValue(x.Key, x.Value)))
                             .ToArray();
                     }
                     return new[]
                     {
-                        new KeyValuePair<string, bool?>(node.Key,
+                        new KeyValuePair<string, bool?>(ExtractFeatureToggleName(node.Key),
                             ParseFeatureToggleValue(node.Key, node.Value))
                     };
                 })
@@ -59,6 +59,11 @@ namespace HobknobClientNet
                 default:
                     return null;
             }
+        }
+
+        private static string ExtractFeatureToggleName(string name)
+        {
+            return name.Split('/').Last();
         }
     }
 }
