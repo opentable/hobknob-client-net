@@ -35,9 +35,13 @@ namespace HobknobClientNet
         public bool? Get(string applicationName, string featureName, string toggleName = null)
         {
             var toggleSuffix = toggleName != null ? "/" + toggleName : string.Empty;
-            var featureToggleKey = string.Format("/v1/toggles/{0}/{1}{2}", applicationName, featureName, toggleSuffix);
+            var featureToggleKey = string.Format("{0}{1}", featureName, toggleSuffix);
             bool value;
             return _cache != null && _cache.TryGetValue(featureToggleKey, out value) ? value : (bool?)null;
+        }
+        public Dictionary<string, bool> GetAll()
+        {
+            return _cache;
         }
 
         private bool UpdateCache()

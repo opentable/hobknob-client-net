@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HobknobClientNet
 {
@@ -8,6 +9,7 @@ namespace HobknobClientNet
         event EventHandler<CacheUpdateFailedArgs> CacheUpdateFailed;
         bool GetOrDefault(string featureName, bool defaultValue);
         bool GetOrDefault(string featureName, string toggleName, bool defaultValue);
+        Dictionary<string, bool> GetAll();
     }
 
     public class HobknobClient : IHobknobClient
@@ -36,6 +38,11 @@ namespace HobknobClientNet
         {
             return _featureToggleCache.Get(_applicationName, featureName, toggleName)
                 .GetValueOrDefault(defaultValue);
+        }
+
+        public Dictionary<string, bool> GetAll()
+        {
+            return _featureToggleCache.GetAll();
         }
 
         private void RaiseCacheUpdatedEvent(object sender, CacheUpdatedArgs eventArgs)
