@@ -51,7 +51,7 @@ namespace HobknobClientNet
             {
                 if (CacheUpdateFailed != null)
                 {
-                    CacheUpdateFailed.Invoke(this, new CacheUpdateFailedArgs(ex));
+                    CacheUpdateFailed(this, new CacheUpdateFailedArgs(ex));
                 }                    
                 return false;
             }
@@ -60,7 +60,7 @@ namespace HobknobClientNet
             _cache = featureToggles;
             if (CacheUpdated != null)
             {
-                CacheUpdated.Invoke(this, new CacheUpdatedArgs(updates));
+                CacheUpdated(this, new CacheUpdatedArgs(updates));
             }
             return true;
         }
