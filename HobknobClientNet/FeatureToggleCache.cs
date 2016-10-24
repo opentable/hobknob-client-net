@@ -49,13 +49,15 @@ namespace HobknobClientNet
             }
             catch (Exception ex)
             {
-                CacheUpdateFailed?.Invoke(this, new CacheUpdateFailedArgs(ex));
+                if (CacheUpdateFailed != null)
+                    CacheUpdateFailed.Invoke(this, new CacheUpdateFailedArgs(ex));
                 return false;
             }
 
             var updates = GetUpdates(_cache, featureToggles);
             _cache = featureToggles;
-            CacheUpdated?.Invoke(this, new CacheUpdatedArgs(updates));
+            if (CacheUpdated != null)
+                CacheUpdated.Invoke(this, new CacheUpdatedArgs(updates));
             return true;
         }
 
