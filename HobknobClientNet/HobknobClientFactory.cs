@@ -18,7 +18,7 @@ namespace HobknobClientNet
             var featureToggleCache = new FeatureToggleCache(featureToggleProvider, cacheUpdateInterval);
             var hobknobClient = new HobknobClient(featureToggleCache, applicationName);
             if (cacheUpdateFailed == null)
-                throw new ArgumentNullException(nameof(cacheUpdateFailed));
+                throw new ArgumentNullException("cacheUpdateFailed", "Cached update handler is emtpy");
             featureToggleCache.CacheUpdateFailed += cacheUpdateFailed;
 
             featureToggleCache.Initialize();
