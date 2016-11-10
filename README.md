@@ -27,6 +27,7 @@ var toggleValue2 = client.GetOrDefault("Feature2", true); // Feature2 does not e
 var toggleValue3 = client.GetOrDefault("DomainFeature1", "com", true); // Feature1/com exists => false
 var toggleValue4 = client.GetOrDefault("DomainFeature1", "couk", true); // Feature1/couk does not exist => true
 
+var allToggles = client.GetAll();
 ```
 
 ## API
@@ -63,6 +64,14 @@ Gets the boolean value of a multi feature toggle if it exists, otherwise return 
 
 ```c#
 var featureToggleValueForCom = client.GetOrDefault("DomainFeature1", "com", false);
+```
+
+### client.GetAll()
+
+Gets the values for all features for the application
+
+```c#
+var allToggles = client.GetAll();
 ```
 
 ### client.CacheUpdated
