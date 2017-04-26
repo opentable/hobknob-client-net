@@ -65,7 +65,7 @@ namespace HobknobClientNet
         {
             var tokens = name.Split('/').ToList();
 
-            return isDir ? string.Join(",", tokens.Skip(tokens.Count - 2)) : tokens.Last();
+            return isDir ? string.Join("/", tokens.Skip(tokens.Count - 2)) : tokens.Last();
         }
     }
 }
