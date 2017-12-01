@@ -1,0 +1,14 @@
+version: '3'
+services:
+  client:
+    build:
+      context: .
+      args: 
+        version: '3.0.0'
+    image: hobknob_client_net:latest
+    volumes:
+    - ./nuget_package:/opt/nuget_package
+    links:
+    - etcd
+  etcd:
+    image: elcolio/etcd

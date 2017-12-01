@@ -1,16 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobknobClientNet", "HobknobClientNet\HobknobClientNet.csproj", "{0ABA6365-C6BB-4596-9782-281994EB3256}"
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2005
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HobknobClientNet", "src\HobknobClientNet.csproj", "{0ABA6365-C6BB-4596-9782-281994EB3256}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobknobClientNet.Tests", "HobknobClientNet.Tests\HobknobClientNet.Tests.csproj", "{75F6E833-E312-40D9-AA46-22D1A90CFFDF}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A906B881-FE0A-45A5-AC2C-745B7814B469}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobknobClientNet.Tests", "test\HobknobClientNet.Tests.csproj", "{75F6E833-E312-40D9-AA46-22D1A90CFFDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,5 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {17157140-A6EC-40CE-BB55-CFCD1580CF10}
 	EndGlobalSection
 EndGlobal
