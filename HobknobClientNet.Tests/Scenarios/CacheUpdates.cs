@@ -89,7 +89,7 @@ namespace HobknobClientNet.Tests.Scenarios
 
         private void AssertToggleUpdate(Dictionary<string, CacheUpdate> updates, string key, bool? oldValue, bool? newValue)
         {
-            var cacheUpdate = updates["/v1/toggles/" + ApplicationName + "/" + key];
+            var cacheUpdate = updates[key];
             Assert.That(cacheUpdate.OldValue, Is.EqualTo(oldValue));
             Assert.That(cacheUpdate.NewValue, Is.EqualTo(newValue));
         }

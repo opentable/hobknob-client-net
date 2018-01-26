@@ -7,12 +7,14 @@ namespace HobknobClientNet
     internal class FeatureToggleProvider
     {
         private readonly EtcdClient _etcdClient;
+        private readonly string _applicationKeyPrefix;
         private readonly Uri _applicationDirectoryKey;
 
         public FeatureToggleProvider(EtcdClient etcdClient, string applicationName)
         {
             _etcdClient = etcdClient;
-            _applicationDirectoryKey = new Uri(string.Format("v1/toggles/{0}", applicationName), UriKind.Relative);
+            _applicationKeyPrefix = string.Format("v1/toggles/{0}", applicationName);
+            _applicationDirectoryKey = new Uri(_applicationKeyPrefix, UriKind.Relative);
         }
 
         public IEnumerable<KeyValuePair<string, bool>> Get()
@@ -61,9 +63,9 @@ namespace HobknobClientNet
             }
         }
 
-        private static string ExtractFeatureToggleName(string name)
+        private string ExtractFeatureToggleName(string name)
         {
-            return name.Split('/').Last();
+            return name.Replace(string.Format("/{0}/", _applicationKeyPrefix), string.Empty);
         }
     }
 }

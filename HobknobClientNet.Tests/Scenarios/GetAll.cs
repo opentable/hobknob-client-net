@@ -19,13 +19,17 @@ namespace HobknobClientNet.Tests.Scenarios
             var _expected = new Dictionary<string, bool>()
             {
                 { "feature1", false },
-                { "feature2", true }
+                { "feature2", true },
+                { "feature3/toggle1", true }
             };
 
-            Given_a_toggle("app1", "feature1", "true");
-            Given_a_toggle("app1", "feature2", "false");
+            Given_a_toggle("app1", "feature1", "false");
+            Given_a_toggle("app1", "feature2", "true");
+            Given_a_toggle("app1", "feature3", "toggle1", "true");
+            Given_a_toggle("app2", "feature2", "true");
+            Given_a_toggle("app2", "feature3", "toggle1", "true");
             When_I_get_all_the_toggles(out _toggles);
-            Assert.AreEqual(_toggles, _expected);
+            CollectionAssert.AreEquivalent(_toggles, _expected);
         }
     }
 }
