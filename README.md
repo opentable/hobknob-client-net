@@ -95,25 +95,12 @@ client.CacheUpdateFailed += (sender, eventArgs) => { console.Write(eventArgs.Exc
 
 ```
 
-## Building from source
+## Building, testing and packaging from source
 
-This project uses Grunt to build and create a Nuget package. Run the following in the command line:
-
-```
-npm install
-grunt build
-```
-
-There is a file called HobknobClientNet.nuspec which is used to configure the Nuget package. See http://docs.nuget.org/ for more information.
-
-### Testing
-
-There are end-to-end tests which can be run via grunt.
-
-> These tests require Etcd to be installed locally on port 4001 (this can be done via Vagrant by executing `vagrant up` in the root directory).
+This project uses Docker Compose to build, test and create a Nuget package. Run the following in the command line:
 
 ```
-grunt test
+docker-compose up --build --abort-on-container-exit
 ```
 
 ### Publishing package to Nuget

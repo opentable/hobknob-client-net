@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+   <TargetFrameworks>net451;netstandard2.0</TargetFrameworks> 
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <id>hobknob-client-net</id>
+    <version>0.0.0</version>
+    <title>hobknob-client-net</title>
+    <authors>OpenTable</authors>
+    <owners>OpenTable</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A .net client library for Hobknob</description>
+    <releaseNotes>Multi-Targeted Hobknob client</releaseNotes>
+    <copyright>Copyright OpenTable 2017</copyright>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="10.0.3" />
+    </dependencies>
+    <RootNamespace>HobknobClientNet</RootNamespace>
+    <AssemblyName>HobknobClientNet</AssemblyName>
+    <repositoryUrl>https://github.com/opentable/hobknob-client-net</repositoryUrl>
+    <PackageId>hobknob-client-net</PackageId>
+    <PackageTags>Feature Toggle Switch Hobknob</PackageTags>
+    <PackageProjectUrl>https://github.com/opentable/hobknob-client-net</PackageProjectUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net451'">
+    <DefineConstants>NET451;NETFULL</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
+  </ItemGroup>
+
+   <ItemGroup Condition=" '$(TargetFramework)' == 'net451'">
+    <Reference Include="System.Net.Http" />
+  </ItemGroup> 
+</Project>
