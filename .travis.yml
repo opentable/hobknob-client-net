@@ -1,0 +1,21 @@
+language: csharp
+sudo: required
+services:
+- docker
+env:
+  DOCKER_COMPOSE_VERSION: 1.8.0
+  global:
+    secure: iADpjFVrKjwjuGr/4Gt21gEnfePorGa3JsgYF/1Y1MzbzTX2w6bIX1jAtHZ/dD2SGwfhzaO5lCQ+H3KuPasuy3/dy14OHLiFHPTmbs8X2SpEIuj9HruFOTMb5EaDOV2hHrF/OWuiNH4WIZqH7RNonqKMgfyxoxdkidU1il/4SbA=
+mono:
+- 5.4.1
+before_install:
+- sudo nuget update -self
+- docker-compose pull
+script:
+- docker-compose up --build --abort-on-container-exit
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: sudo nuget push ./nuget_package/*.nupkg -ApiKey $NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
+  on:
+    branch: master
