@@ -13,7 +13,7 @@ COPY . /app
 WORKDIR /app
 
 #Restore test dependencies
-RUN msbuild /t:restore /p:RestoreConfigFile=NuGet.Config hobknob-client-net.sln
+RUN msbuild /t:restore hobknob-client-net.sln
 
 #Build for test release
 RUN msbuild /p:Configuration=Release /p:version=$version hobknob-client-net.sln
